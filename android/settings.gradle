@@ -1,1 +1,26 @@
-include ':app'
+pluginManagement {
+def flutterSdkPath = {
+def properties = new Properties()
+def file = new File(rootProject.projectDir, "local.properties")
+if (file.exists()) {
+file.inputStream().withCloseable { properties.load(it) }
+}
+def sdkDir = properties.getProperty("flutter.sdk")
+assert sdkDir != null : "flutter.sdk not set in local.properties"
+return sdkDir
+}()
+
+includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
+
+repositories {
+google()
+mavenCentral()
+gradlePluginPortal()
+}
+}
+
+plugins {
+id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
+}
+
+include ":app"
